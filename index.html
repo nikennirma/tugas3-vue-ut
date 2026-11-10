@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SITTA - Sistem Informasi Tiras dan Transaksi Bahan Ajar</title>
+
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+    <!-- Vue 2 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <h1>SITTA - Universitas Terbuka</h1>
+        <p>Sistem Informasi Tiras dan Transaksi Bahan Ajar</p>
+      </header>
+
+      <nav class="main-nav">
+        <button
+          type="button"
+          :class="{ active: tab === 'stok' }"
+          @click="tab = 'stok'"
+        >
+          Stok Bahan Ajar
+        </button>
+
+        <button
+          type="button"
+          :class="{ active: tab === 'tracking' }"
+          @click="tab = 'tracking'"
+        >
+          Tracking DO
+        </button>
+
+        <button
+          type="button"
+          :class="{ active: tab === 'order' }"
+          @click="tab = 'order'"
+        >
+          Tambah Delivery Order
+        </button>
+      </nav>
+
+      <main class="app-content">
+        <section v-if="loading">Memuat data...</section>
+
+        <section v-else-if="error">
+          <p class="error-message">{{ error }}</p>
+        </section>
+
+        <template v-else>
+          <!-- Komponen filter mengikuti ketersediaan data -->
+          <section v-show="tab === 'stok'">
+            <ba-stock-table
+              :stok="data.stok"
+              :upbjj-list="data.upbjjList"
+              :kategori-list="data.kategoriList"
+              @update-stok="data.stok = $event"
+            >
+            </ba-stock-table>
+          </section>
+
+          <section v-show="tab === 'tracking'">
+            <do-tracking
+              :tracking="data.tracking"
+              :paket-list="data.paket"
+              :pengiriman-list="data.pengirimanList"
+              @update-tracking="data.tracking = $event"
+            >
+            </do-tracking>
+          </section>
+
+          <section v-show="tab === 'order'">
+            <order-form
+              :paket-list="data.paket"
+              :upbjj-list="data.upbjjList"
+              :pengiriman-list="data.pengirimanList"
+              :tracking="data.tracking"
+              @create-order="tambahPesanan"
+            >
+            </order-form>
+          </section>
+        </template>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+    <script src="js/services/api.js"></script>
+    <script src="js/components/stock-table.js"></script>
+    <script src="js/components/do-tracking.js"></script>
+    <script src="js/components/order-form.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

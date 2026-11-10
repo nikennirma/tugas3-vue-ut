@@ -1,0 +1,244 @@
+
+<div class="tracking-page">
+    <h2>Tracking Delivery Order</h2>
+
+    <!-- Pencarian DO -->
+    <div class="tracking-search">
+        <input
+            type="text"
+            v-model="keyword"
+            placeholder="Masukkan Nomor DO atau NIM..."
+            @keyup.enter="cariTracking"
+            @keyup.esc="resetPencarian">
+
+        <button type="button" @click="cariTracking">
+            Cari
+        </button>
+
+        <button type="button" @click="resetPencarian">
+            Reset
+        </button>
+
+        <button type="button" @click="bukaForm">
+            + Tambah DO
+        </button>
+    </div>
+
+    <p class="tracking-hint">
+        Tekan Enter untuk mencari dan Esc untuk menghapus pencarian.
+    </p>
+
+    <!-- Form Delivery Order baru -->
+    <div v-if="tampilForm" class="tracking-form">
+        <h3>Tambah Delivery Order Baru</h3>
+
+        <form @submit.prevent="simpanDO">
+            <div class="form-grid">
+                <div>
+                    <label>NIM</label>
+                    <input
+                        v-model.trim="form.nim"
+                        type="text"
+                        required
+                        placeholder="Masukkan NIM">
+                </div>
+
+                <div>
+                    <label>Nama Mahasiswa</label>
+                    <input
+                        v-model.trim="form.nama"
+                        type="text"
+                        required
+                        placeholder="Masukkan nama">
+                </div>
+
+                <div>
+                    <label>Ekspedisi</label>
+                    <select v-model="form.ekspedisi" required>
+                        <option value="">Pilih Ekspedisi</option>
+                        <option
+                            v-for="item in pengirimanList"
+                            :key="item.kode"
+                            :value="item.kode">
+                            {{ item.kode }} - {{ item.nama }}
+                        </option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Paket Bahan Ajar</label>
+                    <select v-model="form.paket" required>
+                        <option value="">Pilih Paket</option>
+                        <option
+                            v-for="paket in paketList"
+                            :key="paket.kode"
+                            :value="paket.kode">
+                            {{ paket.kode }} - {{ paket.nama }}
+                        </option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Tanggal Kirim</label>
+                    <input
+                        type="date"
+                        v-model="form.tanggalKirim"
+                        required>
+                </div>
+            </div>
+
+            <!-- Detail paket -->
+            <div v-if="paketDipilih" class="package-detail">
+                <h4>Detail Paket Bahan Ajar</h4>
+
+                <p><strong>Kode:</strong> {{ paketDipilih.kode }}</p>
+                <p><strong>Nama:</strong> {{ paketDipilih.nama }}</p>
+
+                <p><strong>Isi Paket:</strong></p>
+                <ul>
+                    <li
+                        v-for="(kode, index) in paketDipilih.isi"
+                        :key="index">
+                        {{ kode }}
+                    </li>
+                </ul>
+
+                <p>
+                    <strong>Total Harga:</strong>
+                    {{ formatRupiah(paketDipilih.harga) }}
+                </p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-save">
+                    Simpan DO
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-cancel"
+                    @click="tampilForm = false">
+                    Batal
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Hasil pencarian -->
+    <div v-if="sudahMencari" class="tracking-results">
+        <h3>Hasil Pencarian</h3>
+
+        <div v-if="hasilPencarian.length > 0">
+            <div
+                v-for="hasil in hasilPencarian"
+                :key="hasil.nomorDO"
+                class="tracking-result-item">
+
+                <div>
+                    <strong>{{ hasil.nomorDO }}</strong>
+                    <p>{{ hasil.detail.nama }} - NIM {{ hasil.detail.nim }}</p>
+                    <p>Status: {{ hasil.detail.status }}</p>
+                </div>
+
+                <button
+                    type="button"
+                    @click="pilihTracking(hasil.nomorDO)">
+                    Lihat Detail
+                </button>
+            </div>
+        </div>
+
+        <p v-else class="empty-data">
+            Data Delivery Order tidak ditemukan.
+        </p>
+    </div>
+
+    <!-- Detail tracking -->
+    <div v-if="dataTrackingDipilih" class="tracking-detail">
+        <h3>Detail Pengiriman</h3>
+
+        <div class="tracking-info">
+            <p>
+                <strong>Nomor DO:</strong> {{ selectedDO }}
+            </p>
+
+            <p>
+                <strong>NIM:</strong> {{ dataTrackingDipilih.nim }}
+            </p>
+
+            <p>
+                <strong>Nama:</strong> {{ dataTrackingDipilih.nama }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                <span class="tracking-status">
+                    {{ dataTrackingDipilih.status }}
+                </span>
+            </p>
+
+            <p>
+                <strong>Ekspedisi:</strong>
+                {{ namaEkspedisi(dataTrackingDipilih.ekspedisi) }}
+            </p>
+
+            <p>
+                <strong>Paket:</strong>
+                {{ namaPaket(dataTrackingDipilih.paket) }}
+            </p>
+
+            <p>
+                <strong>Tanggal Kirim:</strong>
+                {{ formatTanggal(dataTrackingDipilih.tanggalKirim) }}
+            </p>
+
+            <p>
+                <strong>Total:</strong>
+                {{ formatRupiah(dataTrackingDipilih.total) }}
+            </p>
+        </div>
+
+        <!-- Riwayat perjalanan -->
+        <h3>Riwayat Perjalanan</h3>
+
+        <div v-if="dataTrackingDipilih.perjalanan &&
+                  dataTrackingDipilih.perjalanan.length > 0"
+             class="tracking-timeline">
+
+            <div
+                v-for="(item, index) in dataTrackingDipilih.perjalanan"
+                :key="index"
+                class="timeline-item">
+
+                <div class="timeline-dot"></div>
+
+                <div>
+                    <strong>{{ item.keterangan }}</strong>
+                    <p>{{ item.waktu }}</p>
+                </div>
+            </div>
+        </div>
+
+        <p v-else class="empty-data">
+            Belum ada riwayat perjalanan.
+        </p>
+
+        <!-- Tambah progress -->
+        <div class="progress-form">
+            <h3>Tambah Progress Perjalanan</h3>
+
+            <form @submit.prevent="tambahProgress">
+                <textarea
+                    v-model="keteranganBaru"
+                    rows="3"
+                    placeholder="Masukkan keterangan perjalanan..."
+                    required>
+                </textarea>
+
+                <button type="submit" class="btn-save">
+                    Tambah Progress
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

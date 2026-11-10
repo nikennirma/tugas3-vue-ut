@@ -1,0 +1,387 @@
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f7f6;
+    color: #263238;
+}
+
+.app-header {
+    background: #0c1758;
+    color: white;
+    padding: 24px;
+}
+
+.app-header h1 {
+    margin: 0 0 8px;
+}
+
+.app-header p {
+    margin: 0;
+}
+
+.main-nav {
+    display: flex;
+    gap: 8px;
+    padding: 12px 24px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+}
+
+.main-nav button {
+    border: none;
+    background: #e0ffe9;
+    color: #0c1758;
+    padding: 10px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.main-nav button.active {
+    background: #0c1758;
+    color: white;
+}
+
+.app-content {
+    padding: 24px;
+}
+
+.error-message {
+    color: #b00020;
+}
+
+/* Table styles */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: white;
+    border-radius: 8px;
+}
+
+.stock-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+.stock-table th,
+.stock-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+.stock-table th {
+    background: #0c1758;
+    color: white;
+}
+
+.stock-status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: help;
+}
+
+.status-safe {
+    color: #176b35;
+    background: #e0ffe9;
+}
+
+.status-low {
+    color: #a85c00;
+    background: #fff0d5;
+}
+
+.status-empty {
+    color: #b00020;
+    background: #ffe1e5;
+}
+
+.empty-data {
+    text-align: center !important;
+    padding: 24px !important;
+}
+
+/*style stock table*/
+.stock-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.stock-filter input,
+.stock-filter select,
+.stock-filter button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.stock-filter input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.stock-filter button {
+    background: #0c1758;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+.stock-filter button:hover {
+    background: #084333;
+}
+
+
+/* button */
+
+.btn-add,
+.btn-save,
+.btn-edit,
+.btn-delete,
+.btn-cancel {
+    padding: 9px 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 3px;
+}
+
+.btn-add,
+.btn-save {
+    background: #0c1758;
+    color: white;
+}
+
+.btn-edit {
+    background: #e6a700;
+    color: #fff;
+}
+
+.btn-delete {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+}
+
+.stock-form {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.form-grid label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.form-grid input,
+.form-grid select {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-actions {
+    margin-top: 18px;
+}
+
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* tracking */
+
+.tracking-search {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0 5px;
+}
+
+.tracking-search input {
+    flex: 1;
+    min-width: 220px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.tracking-search button,
+.tracking-result-item button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background: #0c1758;
+    color: white;
+    cursor: pointer;
+}
+
+.tracking-hint {
+    color: #777;
+    font-size: 13px;
+}
+
+.tracking-form,
+.tracking-detail,
+.tracking-results {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.tracking-result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.tracking-info {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px 20px;
+}
+
+.tracking-status {
+    color: #0c1758;
+    font-weight: bold;
+}
+
+.package-detail {
+    margin-top: 15px;
+    padding: 15px;
+    background: #e0ffe9;
+    border-radius: 6px;
+}
+
+.tracking-timeline {
+    margin: 20px 0;
+    padding-left: 10px;
+    border-left: 2px solid #0c1758;
+}
+
+.timeline-item {
+    position: relative;
+    display: flex;
+    gap: 15px;
+    padding: 0 0 20px 15px;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -17px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    background: #0c1758;
+    border-radius: 50%;
+}
+
+.timeline-item p {
+    color: #777;
+    font-size: 13px;
+}
+
+.progress-form {
+    margin-top: 25px;
+}
+
+.progress-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+@media (max-width: 600px) {
+    .tracking-info {
+        grid-template-columns: 1fr;
+    }
+
+    .tracking-result-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+
+/* style order form */
+
+.order-page {
+    margin-top: 20px;
+}
+
+.order-form {
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.order-form h3 {
+    margin-top: 0;
+}
+
+.order-total {
+    padding: 12px;
+    background: #e0ffe9;
+    color: #0c1758;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.order-success {
+    padding: 25px;
+    margin-top: 20px;
+    text-align: center;
+    background: #e0ffe9;
+    border: 1px solid #0c1758;
+    border-radius: 8px;
+}
+
+.order-success h2 {
+    color: #0c1758;
+}
+
+.order-success button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background: #0c1758;
+    cursor: pointer;
+}

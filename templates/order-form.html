@@ -1,0 +1,124 @@
+
+<div class="order-page">
+    <h2>Form Pemesanan Bahan Ajar</h2>
+
+    <div v-if="berhasil" class="order-success">
+        <h3>Pesanan berhasil dibuat!</h3>
+
+        <p>Nomor Delivery Order:</p>
+        <h2>{{ nomorDOBaru }}</h2>
+
+        <p>Silakan gunakan nomor DO tersebut pada menu Tracking.</p>
+
+        <button type="button" @click="pesanLagi">
+            Buat Pesanan Baru
+        </button>
+    </div>
+
+    <div v-else class="order-form">
+        <form @submit.prevent="simpanPesanan">
+            <h3>Data Pemesan</h3>
+
+            <div class="form-grid">
+                <div>
+                    <label>NIM</label>
+                    <input
+                        type="text"
+                        v-model.trim="form.nim"
+                        placeholder="Masukkan NIM"
+                        required>
+                </div>
+
+                <div>
+                    <label>Nama Mahasiswa</label>
+                    <input
+                        type="text"
+                        v-model.trim="form.nama"
+                        placeholder="Masukkan nama mahasiswa"
+                        required>
+                </div>
+
+                <div>
+                    <label>UPBJJ</label>
+                    <select v-model="form.upbjj" required>
+                        <option value="">Pilih UPBJJ</option>
+                        <option
+                            v-for="upbjj in upbjjList"
+                            :key="upbjj"
+                            :value="upbjj">
+                            {{ upbjj }}
+                        </option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Ekspedisi</label>
+                    <select v-model="form.ekspedisi" required>
+                        <option value="">Pilih Ekspedisi</option>
+                        <option
+                            v-for="item in pengirimanList"
+                            :key="item.kode"
+                            :value="item.kode">
+                            {{ item.kode }} - {{ item.nama }}
+                        </option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Tanggal Pemesanan</label>
+                    <input
+                        type="date"
+                        v-model="form.tanggalKirim"
+                        required>
+                </div>
+
+                <div>
+                    <label>Paket Bahan Ajar</label>
+                    <select v-model="form.paket" required>
+                        <option value="">Pilih Paket</option>
+                        <option
+                            v-for="paket in paketList"
+                            :key="paket.kode"
+                            :value="paket.kode">
+                            {{ paket.nama }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div v-if="paketDipilih" class="package-detail">
+                <h3>Rincian Paket</h3>
+
+                <p><strong>Kode:</strong> {{ paketDipilih.kode }}</p>
+                <p><strong>Nama Paket:</strong> {{ paketDipilih.nama }}</p>
+
+                <p><strong>Daftar Bahan Ajar:</strong></p>
+                <ul>
+                    <li
+                        v-for="kode in paketDipilih.isi"
+                        :key="kode">
+                        {{ kode }}
+                    </li>
+                </ul>
+
+                <p class="order-total">
+                    Total Pembayaran:
+                    {{ formatRupiah(paketDipilih.harga) }}
+                </p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-save">
+                    Buat Pesanan
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-cancel"
+                    @click="resetForm">
+                    Reset
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
